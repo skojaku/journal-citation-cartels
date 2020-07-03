@@ -1,0 +1,33 @@
+from os.path import join as j
+import numpy as np
+
+#configfile: "workflow/config.yaml"
+
+NET_DIR = "../../data/networks" 
+
+PAPER_FILE_NAME = j(NET_DIR, "paper_table.csv")
+NET_FILE = j(NET_DIR, "{year}.pickle") # to do: change pickle to other format 
+AGG_NET_FILE = j(NET_DIR, "all.pickle")
+ALL_NET_FILE = expand(NET_FILE, year = np.arange(2000, 2020))
+
+rule all:
+    input: ALL_NET_FILE
+
+rule count_papers:
+    output: PAPER_FILE_NAME
+    run:
+        shell("python3 count_papers.py {PAPER_FILE_NAME}")
+
+rule construct_network:
+    input: PAPER_FILE_NAME
+    output: NET_FILE 
+    params:
+        year = lambda wildcards : wildards.year
+    run:
+        shell("python3 construct_network.py {input} {params.year} {output}")
+
+rule construct_aggregated_network:
+    input: ALL_NET_FILE
+    output: AGG_NET_FILE 
+    run:
+        shell("python3 construct_aggregated_network.py {input} {output}")
