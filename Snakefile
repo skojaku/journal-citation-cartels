@@ -36,6 +36,7 @@ DBNAME = "magdb"
 # 
 MAG_CONTAINER_KEY = config["container_key"]
 
+#TODO download only relevant areas, then run with below command
 MAG_DATA_FILENAME = [
 "Journals.txt",
 "Authors.txt",
@@ -49,7 +50,7 @@ MAG_DATA_FILE_ALL = expand(MAG_DATA_FILE, mag_filename = MAG_DATA_FILENAME)
 
 #
 # Cleaning
-# 
+# TODO add on "PaperAcademyAffiliations.txt"
 MAG_CLEANED_DATA_FILENAME = MAG_DATA_FILENAME + ["PaperJournalAffiliations.txt"]
 MAG_CLEANED_DATA_FILE = j(MAG_CLEANED_DATA_DIR,"{mag_filename}")
 MAG_CLEANED_DATA_FILE_ALL = expand(MAG_CLEANED_DATA_FILE, mag_filename = MAG_CLEANED_DATA_FILENAME)
@@ -112,18 +113,21 @@ rule paper:
     output: PAPER
     shell: "cd {params.paper_dir}; make"
 
+# Sets up connection + database tables
 rule import_neo4j:
     input: MAG_CLEANED_DATA_FILE_ALL
     output: directory(MAG_DB_DIR)
     run:
         shell("bash workflow/mag2neo4j.sh {MAG_DB_DIR} {MAG_CLEANED_DATA_DIR} {DB_CONF_DIR} {DBNAME}")
 
+# Creates file headers?
 rule cleanup_mag:
     input: MAG_DATA_FILE_ALL
     output: MAG_CLEANED_DATA_FILE_ALL
     run:
         shell("bash workflow/cleanup_mag_file.sh {MAG_SRC_DATA_DIR} {MAG_CLEANED_DATA_DIR}")
 
+# Gets the data
 rule download_mag:
     output: MAG_DATA_FILE
     params:
@@ -177,17 +181,18 @@ rule detect_cartels_yearly:
     run:
         shell("python3 workflow/detect_cartels.py {params.year} {NETWORK_DIR} {THETA_CIDRE} {ALPHA_CIDRE} {DETECTED_COMMUNITY_FILE} {output}")
 
-rule match_mag_wos_suspended_journals_by_TR: 
-    input: TR_SUSPENDED_JOURNAL_PAIRS_FILE 
-    output: TR_SUSPENDED_JOURNAL_GROUPS_FILE
-    run:
-        shell("python3 workflow/match_tr_banned.py {TR_SUSPENDED_JOURNAL_PAIRS_FILE} {output}")
+# Irrelevant as not looking into journals?
+# rule match_mag_wos_suspended_journals_by_TR: 
+#     input: TR_SUSPENDED_JOURNAL_PAIRS_FILE 
+#     output: TR_SUSPENDED_JOURNAL_GROUPS_FILE
+#     run:
+#         shell("python3 workflow/match_tr_banned.py {TR_SUSPENDED_JOURNAL_PAIRS_FILE} {output}")
 
-rule plot_vs_thomson_reuters: 
-    input: TR_SUSPENDED_JOURNAL_GROUPS_FILE, CARTEL_DIR
-    output: FIG_VS_TR 
-    run:
-        shell("python3 workflow/plot-TR-vs-detected.py {CARTEL_DIR} {TR_SUSPENDED_JOURNAL_GROUPS_FILE} {output}")
+# rule plot_vs_thomson_reuters: 
+#     input: TR_SUSPENDED_JOURNAL_GROUPS_FILE, CARTEL_DIR
+#     output: FIG_VS_TR 
+#     run:
+#         shell("python3 workflow/plot-TR-vs-detected.py {CARTEL_DIR} {TR_SUSPENDED_JOURNAL_GROUPS_FILE} {output}")
 
 rule plot_cartel_stats: 
     input: CARTEL_DIR
@@ -195,11 +200,11 @@ rule plot_cartel_stats:
     run:
         shell("python3 workflow/plot-cartel-stat.py {CARTEL_DIR} {output}")
 
-rule classify_cartels: 
-    input: TR_SUSPENDED_JOURNAL_GROUPS_FILE, YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 
-    output: CARTELS_FOR_CASE_STUDY, CARTEL_CLASSIFICATION_STAT 
-    run:
-        shell("python3 workflow/classify-detected-cartels.py {NETWORK_DIR} {TR_SUSPENDED_JOURNAL_GROUPS_FILE} {CARTEL_DIR} {CARTEL_CLASSIFICATION_STAT} {CARTELS_FOR_CASE_STUDY}")
+# rule classify_cartels: 
+#     input: TR_SUSPENDED_JOURNAL_GROUPS_FILE, YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 
+#     output: CARTELS_FOR_CASE_STUDY, CARTEL_CLASSIFICATION_STAT 
+#     run:
+#         shell("python3 workflow/classify-detected-cartels.py {NETWORK_DIR} {TR_SUSPENDED_JOURNAL_GROUPS_FILE} {CARTEL_DIR} {CARTEL_CLASSIFICATION_STAT} {CARTELS_FOR_CASE_STUDY}")
 
 rule plot_citation_net_cartels: 
     input: CARTELS_FOR_CASE_STUDY, YEARLY_EDGE_FILE_ALL, YEARLY_NODE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 
