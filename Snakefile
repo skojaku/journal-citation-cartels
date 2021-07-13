@@ -142,7 +142,8 @@ rule count_papers:
     input: directory(MAG_DB_DIR)
     output: PAPER_COUNT_FILE
     run:
-        shell("python3 workflow/count_papers.py {output}")
+        shell("python3 workflow/count_papers.py {output}") 
+# python3 workflow/count_papers.py data/networks/paper_count.csv
 
 rule construct_yearly_networks:
     input: PAPER_COUNT_FILE
