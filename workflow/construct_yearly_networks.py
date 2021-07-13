@@ -20,14 +20,13 @@ if __name__ == "__main__":
     # Load the paper count
     pcount = pd.read_csv(PAPER_COUNT_FILE, sep="\t")
 
-    # Count the number of papers for each journal
-    #TODO Modify to appropriate
+    # Count the number of papers for each Affiliation
     ys = YEAR - WINDOW_LENGTH
     yf = YEAR
     query = """
-    MATCH (jtrg:Journal)<-[:published_from]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:published_from]->(jsrc:Journal)
+    MATCH (jtrg:Affiliation)<-[:published_from]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:published_from]->(jsrc:Affiliation)
     where trg.Year<%d and trg.Year >= %d
-    return toInteger(jsrc.JournalId) as source, toInteger(jtrg.JournalId) as target, ID(trg) as p_target, ID(src) as s_target
+    return toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, ID(trg) as p_target, ID(src) as s_target
     """ % (
         yf,
         yf,
@@ -52,44 +51,44 @@ if __name__ == "__main__":
     # Uniqify and count
     edges = edges.groupby(["source", "target"]).size().reset_index(name="w")
 
-    # Add citations from retracted papers 
-    #TODO Fix or otherwise handle
-    if year == 2010 or year == 2011:
-        if year == 2010:
-            added_edges = [
-                ["medical science monitor", "cell transplantation", 445],
-                ["the scientific world journal", "cell transplantation", 96],
-                ["medical science monitor", "medical science monitor", 44],
-                ["the scientific world journal", "the scientific world journal", 26],
-            ]
-        elif year == 2011:
-            added_edges = [
-                ["medical science monitor", "cell transplantation", 87],
-                ["medical science monitor", "medical science monitor", 32],
-                ["the scientific world journal", "cell transplantation", 109],
-                ["the scientific world journal", "the scientific world journal", 29],
-                ["cell transplantation", "technology and innovation", 24],
-            ]
+    # # Add citations from retracted papers 
+    # #Probably not going to bother with? 
+    # if year == 2010 or year == 2011:
+    #     if year == 2010:
+    #         added_edges = [
+    #             ["medical science monitor", "cell transplantation", 445],
+    #             ["the scientific world journal", "cell transplantation", 96],
+    #             ["medical science monitor", "medical science monitor", 44],
+    #             ["the scientific world journal", "the scientific world journal", 26],
+    #         ]
+    #     elif year == 2011:
+    #         added_edges = [
+    #             ["medical science monitor", "cell transplantation", 87],
+    #             ["medical science monitor", "medical science monitor", 32],
+    #             ["the scientific world journal", "cell transplantation", 109],
+    #             ["the scientific world journal", "the scientific world journal", 29],
+    #             ["cell transplantation", "technology and innovation", 24],
+    #         ]
 
-        journal_list = list(
-            set([x[0] for x in added_edges] + [x[1] for x in added_edges])
-        )
-        query = """
-        MATCH (n:Journal)
-        WHERE n.NormalizedName in [{journals}]
-        return toInteger(n.JournalId) as id, n.NormalizedName as name 
-        """.format(
-            journals=",".join(["'%s'" % x for x in journal_list])
-        )
-        node_table = graph.run(query).to_data_frame()
+    #     journal_list = list(
+    #         set([x[0] for x in added_edges] + [x[1] for x in added_edges])
+    #     )
+    #     query = """
+    #     MATCH (n:Journal)
+    #     WHERE n.NormalizedName in [{journals}]
+    #     return toInteger(n.JournalId) as id, n.NormalizedName as name 
+    #     """.format(
+    #         journals=",".join(["'%s'" % x for x in journal_list])
+    #     )
+    #     node_table = graph.run(query).to_data_frame()
 
-        name2id = {x["name"]: x["id"] for i, x in node_table.iterrows()}
-        edge_list = [
-            {"source": name2id[x[0]], "target": name2id[x[1]], "w": x[2]}
-            for x in added_edges
-        ]
-        added_edges = pd.DataFrame(edge_list)
-        edges = pd.concat([edges, added_edges], ignore_index=True)
+    #     name2id = {x["name"]: x["id"] for i, x in node_table.iterrows()}
+    #     edge_list = [
+    #         {"source": name2id[x[0]], "target": name2id[x[1]], "w": x[2]}
+    #         for x in added_edges
+    #     ]
+    #     added_edges = pd.DataFrame(edge_list)
+    #     edges = pd.concat([edges, added_edges], ignore_index=True)
 
     # Save to the result
     nodes.to_csv(OUTPUT_NODE_FILE, sep="\t")

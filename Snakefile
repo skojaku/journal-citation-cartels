@@ -154,6 +154,7 @@ rule construct_yearly_networks:
         year = lambda wildcards: wildcards.year
     run:
         shell("python3 workflow/construct_yearly_networks.py {input} {NETWORK_DIR} {params.year} {WINDOW_LENGTH} {output.node} {output.edge}")
+# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2000 9999 data/networks/nodes-2000.csv data/networks/edges-2000.csv
 
 rule construct_yearly_raw_networks:
     input: PAPER_COUNT_FILE
