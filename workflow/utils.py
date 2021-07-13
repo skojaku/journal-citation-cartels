@@ -4,7 +4,7 @@ import pandas as pd
 import networkx as nx
 from scipy import sparse
 
-DATA_DIR = "data/mag"
+DATA_DIR = "data"
 
 
 def get_db():

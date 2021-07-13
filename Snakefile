@@ -65,7 +65,8 @@ RAW_YEARLY_NODE_FILE = j(NETWORK_DIR, "raw-nodes-{year}.csv")
 RAW_YEARLY_EDGE_FILE = j(NETWORK_DIR, "raw-edges-{year}.csv")
 
 WINDOW_LENGTH = 2
-YEARS = list(range(1998, 2020)) 
+#Edit to 2010 to keep simple
+YEARS = list(range(1998, 2010)) 
 YEARLY_NODE_FILE_ALL = expand(YEARLY_NODE_FILE, year = YEARS)
 YEARLY_EDGE_FILE_ALL = expand(YEARLY_EDGE_FILE, year = YEARS)
 RAW_YEARLY_NODE_FILE_ALL = expand(RAW_YEARLY_NODE_FILE, year = YEARS)
@@ -126,6 +127,7 @@ rule cleanup_mag:
     output: MAG_CLEANED_DATA_FILE_ALL
     run:
         shell("bash workflow/cleanup_mag_file.sh {MAG_SRC_DATA_DIR} {MAG_CLEANED_DATA_DIR}")
+# "bash workflow/cleanup_mag_file.sh data/source data/cleaned"
 
 # Gets the data
 rule download_mag:
@@ -134,6 +136,7 @@ rule download_mag:
         filename = lambda wildcards: wildcards.mag_filename
     run:
         shell("python3 workflow/get_mag_data.py {params.filename} {MAG_SRC_DATA_DIR} '{MAG_CONTAINER_KEY}'")
+# DefaultEndpointsProtocol=https;AccountName=magasuscisi;AccountKey=wKBxp5C8dtJykztTdZK68y9KOpMmRur7WSU2+uHxM4Q23WhTtyYy289rOIA+gHQ4Y0EBD6HnsbRq02RMCAxjNg==;EndpointSuffix=core.windows.net
 
 rule count_papers:
     input: directory(MAG_DB_DIR)
@@ -163,7 +166,7 @@ rule construct_yearly_raw_networks:
 
 
 rule detect_communities:
-    input: YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL
+    input: YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, RAW_YEARLY_NODE_FILE_ALL, RAW_YEARLY_EDGE_FILE_ALL
     output: DETECTED_COMMUNITY_FILE
     params:
         years = " ".join(["%d" %d for d in AGGREGATED_YEARS]) 
@@ -206,8 +209,8 @@ rule plot_cartel_stats:
 #     run:
 #         shell("python3 workflow/classify-detected-cartels.py {NETWORK_DIR} {TR_SUSPENDED_JOURNAL_GROUPS_FILE} {CARTEL_DIR} {CARTEL_CLASSIFICATION_STAT} {CARTELS_FOR_CASE_STUDY}")
 
-rule plot_citation_net_cartels: 
-    input: CARTELS_FOR_CASE_STUDY, YEARLY_EDGE_FILE_ALL, YEARLY_NODE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 
-    output: FIG_CITATION_NET_CAETEL
-    run:
-        shell("python3 workflow/plot-citation-net-cartels.py {NETWORK_DIR} {CARTEL_DIR} {CARTELS_FOR_CASE_STUDY} {output}")
+# rule plot_citation_net_cartels: 
+#     input: CARTELS_FOR_CASE_STUDY, YEARLY_EDGE_FILE_ALL, YEARLY_NODE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 
+#     output: FIG_CITATION_NET_CAETEL
+#     run:
+#         shell("python3 workflow/plot-citation-net-cartels.py {NETWORK_DIR} {CARTEL_DIR} {CARTELS_FOR_CASE_STUDY} {output}")

@@ -2,6 +2,8 @@
 # Configuration 
 #=============================================
 docker_container_name=$1
+database_dir=$2
+cleaned_data_dir=$3
 
 #=============================================
 # Lunch the neo4j database 
