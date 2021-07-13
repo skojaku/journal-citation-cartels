@@ -52,7 +52,9 @@ docker run \
     --env NEO4J_dbms_default__database=graph.db \
     neo4j:4.0
 
-sleep 10 # Wait a bit because the neo4j may not be ready immediately 
+echo sleeping
+sleep 20 # Wait a bit because the neo4j may not be ready immediately 
+echo wakeup
 
 #====================================
 # Add indexes to the database 
@@ -63,6 +65,8 @@ CREATE INDEX ON :Author(AuthorId);
 CREATE INDEX ON :Author(NormalizedName);
 CREATE INDEX ON :Journal(JournalId);
 CREATE INDEX ON :Journal(NormalizedName);
+CREATE INDEX ON :Affiliation(AffiliationId);
+CREATE INDEX ON :Affiliation(NormalizedName);
 CREATE INDEX ON :Paper(Doi);
 CREATE INDEX ON :Paper(NormalizedName);
 CREATE INDEX ON :Paper(PaperId);
@@ -70,4 +74,6 @@ CREATE INDEX ON :Paper(Year);
 "| cypher-shell -u neo4j -p dolphinsNeverSleep
 '
 
+echo sleeping
 sleep 600 # Wait a bit until indexing complete 
+echo wakeup

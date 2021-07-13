@@ -48,6 +48,7 @@ if __name__ == "__main__":
         deg_corr=True,
         state_args=dict(eweight=G.ep.weight),
         verbose=True,
+        #TODO params have changed so this no longer works
         B_max=np.round(A.shape[0] / 3).astype(int),
     )
 

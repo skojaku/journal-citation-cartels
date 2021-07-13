@@ -6,10 +6,11 @@ from scipy import sparse
 import utils
 
 PAPER_COUNT_FILE = sys.argv[1]
-YEAR = int(sys.argv[2])
-WINDOW_LENGTH = int(sys.argv[3])
-OUTPUT_NODE_FILE = sys.argv[4]
-OUTPUT_EDGE_FILE = sys.argv[5]
+YEAR = int(sys.argv[3])
+WINDOW_LENGTH = int(sys.argv[4])
+OUTPUT_NODE_FILE = sys.argv[5]
+OUTPUT_EDGE_FILE = sys.argv[6]
+year = YEAR
 
 if __name__ == "__main__":
 
@@ -33,7 +34,7 @@ if __name__ == "__main__":
         ys,
     )
     edges = graph.run(query).to_data_frame()
-    print(query, edges)
+    #print(query, edges)
 
     # Make a node table
     ccount = edges.groupby(["target"])["s_target"].nunique()
@@ -74,7 +75,7 @@ if __name__ == "__main__":
             set([x[0] for x in added_edges] + [x[1] for x in added_edges])
         )
         query = """
-        MATCH (Journal:n)
+        MATCH (n:Journal)
         WHERE n.NormalizedName in [{journals}]
         return toInteger(n.JournalId) as id, n.NormalizedName as name 
         """.format(
