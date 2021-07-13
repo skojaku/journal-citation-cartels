@@ -63,6 +63,8 @@ CREATE INDEX ON :Author(AuthorId);
 CREATE INDEX ON :Author(NormalizedName);
 CREATE INDEX ON :Journal(JournalId);
 CREATE INDEX ON :Journal(NormalizedName);
+CREATE INDEX ON :Affiliation(AffiliationId);
+CREATE INDEX ON :Affiliation(NormalizedName);
 CREATE INDEX ON :Paper(Doi);
 CREATE INDEX ON :Paper(NormalizedName);
 CREATE INDEX ON :Paper(PaperId);

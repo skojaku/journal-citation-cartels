@@ -34,13 +34,17 @@ mkdir $cleaned_data_dir
 
 { echo -e "JournalId:ID(Journal-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Journals.txt; } >$cleaned_data_dir/Journals.txt
 
+{ echo -e "AffiliationId:ID(Affiliation-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Affiliation.txt; } >$cleaned_data_dir/Affiliation.txt
+
 { echo -e "ConferenceSeriesId:ID(Conference-ID)\tNormalizedName";cut -f 1,3 $source_data_dir/ConferenceSeries.txt; } >$cleaned_data_dir/ConferenceSeries.txt
 
 { echo -e ":START_ID(Paper-ID)\t:END_ID(Paper-ID)";cat $source_data_dir/PaperReferences.txt; } >$cleaned_data_dir/PaperReferences.txt
 
 { echo -e ":START_ID(Paper-ID)\t:END_ID(Author-ID)";cut -f 1,2 $source_data_dir/PaperAuthorAffiliations.txt; } >$cleaned_data_dir/PaperAuthorAffiliations.txt
 
-{ echo -e ":START_ID(Paper-ID)\t:END_ID(Journal-ID)";cut -f 1,11 $source_data_dir/Papers.txt; } | awk -F"\t" '{if($2!="")print $0}' >$cleaned_data_dir/PaperJournalAffiliations.txt
+# { echo -e ":START_ID(Paper-ID)\t:END_ID(Journal-ID)";cut -f 1,11 $source_data_dir/Papers.txt; } | awk -F"\t" '{if($2!="")print $0}' >$cleaned_data_dir/PaperJournalAffiliations.txt
+
+{ echo -e ":START_ID(Paper-ID)\t:END_ID(Affiliation-ID)";cut -f 1,3 $source_data_dir/PaperAuthorAffiliations.txt; } | awk -F"\t" '{if($2!="")print $0}' >$cleaned_data_dir/PaperAffiliations.txt
 
 #
 # Escape the quotes
