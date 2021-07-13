@@ -23,6 +23,7 @@ if __name__ == "__main__":
     A_eff, A_gen, nodes = utils.load_network(YEAR, NETWORK_DIR)
 
     # Load the communty membership
+    #TODO Modify journal label
     community_table = pd.read_csv(COMMUNITY_FILE, sep="\t")
     community_ids = (
         community_table.set_index("mag_journal_ids").loc[nodes, "community_id"].values

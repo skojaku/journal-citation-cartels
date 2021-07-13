@@ -20,6 +20,7 @@ if __name__ == "__main__":
     pcount = pd.read_csv(PAPER_COUNT_FILE, sep="\t")
 
     # Count the number of papers for each journal
+    #TODO Modify to appropriate
     ys = YEAR - WINDOW_LENGTH
     yf = YEAR
     query = """
@@ -51,6 +52,7 @@ if __name__ == "__main__":
     edges = edges.groupby(["source", "target"]).size().reset_index(name="w")
 
     # Add citations from retracted papers 
+    #TODO Fix or otherwise handle
     if year == 2010 or year == 2011:
         if year == 2010:
             added_edges = [

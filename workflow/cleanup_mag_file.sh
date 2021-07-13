@@ -25,6 +25,7 @@ mkdir $cleaned_data_dir
 # https://docs.microsoft.com/en-us/academic-services/graph/reference-data-schema
 #=============================================
 
+# TODO Need to run one of these for chosen area. But weird syntax
 { echo -e "AuthorId:ID(Author-ID)\tNormalizedName\tDisplayName";cut -f 1,3,4 $source_data_dir/Authors.txt; } >$cleaned_data_dir/Authors.txt
 
 { echo -e "PaperId:ID(Paper-ID)\tDoi\tDocType\tPaperTitle\tYear:INT\tJournalId\tConferenceSeriesId";cut -f 1,3,4,5,8,11,12 $source_data_dir/Papers.txt; } >$cleaned_data_dir/Papers.txt

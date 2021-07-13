@@ -10,6 +10,7 @@ if __name__ == "__main__":
     graph = utils.get_db()
 
     # Compute the paper count first
+    #TODO Switch to correct
     query = """ 
     MATCH (j:Journal)<-[:published_from]-(p)
     return ID(j) as id, count(p) as pcount, p.Year as year
