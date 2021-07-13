@@ -13,7 +13,7 @@ cleaned_data_dir=$2
 #
 # Escape the quotes
 #
-/lfs2/yuzhongh/tristan/dos2unix $source_data_dir/*.txt
+/lfs2/yuzhongh/dos2unix $source_data_dir/*.txt
 
 rm -r $cleaned_data_dir 
 mkdir $cleaned_data_dir

@@ -36,6 +36,7 @@ docker exec $docker_container_name bash -c '
 neo4j-admin import --database=graph.db --trim-strings=true --nodes Author=/import/Authors.txt --nodes Paper=/import/Papers.txt --nodes Journal=/import/Journals.txt --nodes ConferenceSeries=/import/ConferenceSeries.txt --relationships cites=/import/PaperReferences.txt --relationships written_by=/import/PaperAuthorAffiliations.txt --relationships published_from=/import/PaperJournalAffiliations.txt --delimiter="\t";
 exit
 '
+# TODO modify above
 
 #docker restart $docker_container_name 
 docker stop $docker_container_name && docker rm $docker_container_name 
