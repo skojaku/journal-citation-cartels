@@ -120,6 +120,7 @@ rule import_neo4j:
     output: directory(MAG_DB_DIR)
     run:
         shell("bash workflow/mag2neo4j.sh {MAG_DB_DIR} {MAG_CLEANED_DATA_DIR} {DB_CONF_DIR} {DBNAME}")
+# "bash workflow/mag2neo4j.sh /lfs2/yuzhongh/tristan/journal-citation-cartels/data/database /lfs2/yuzhongh/tristan/journal-citation-cartels/data/cleaned workflow magdb"
 
 # Creates file headers?
 rule cleanup_mag:
@@ -136,13 +137,13 @@ rule download_mag:
         filename = lambda wildcards: wildcards.mag_filename
     run:
         shell("python3 workflow/get_mag_data.py {params.filename} {MAG_SRC_DATA_DIR} '{MAG_CONTAINER_KEY}'")
-# DefaultEndpointsProtocol=https;AccountName=magasuscisi;AccountKey=wKBxp5C8dtJykztTdZK68y9KOpMmRur7WSU2+uHxM4Q23WhTtyYy289rOIA+gHQ4Y0EBD6HnsbRq02RMCAxjNg==;EndpointSuffix=core.windows.net
 
 rule count_papers:
     input: directory(MAG_DB_DIR)
     output: PAPER_COUNT_FILE
     run:
-        shell("python3 workflow/count_papers.py {output}")
+        shell("python3 workflow/count_papers.py {output}") 
+# python3 workflow/count_papers.py data/networks/paper_count.csv
 
 rule construct_yearly_networks:
     input: PAPER_COUNT_FILE
@@ -153,6 +154,7 @@ rule construct_yearly_networks:
         year = lambda wildcards: wildcards.year
     run:
         shell("python3 workflow/construct_yearly_networks.py {input} {NETWORK_DIR} {params.year} {WINDOW_LENGTH} {output.node} {output.edge}")
+# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2000 9999 data/networks/nodes-2000.csv data/networks/edges-2000.csv
 
 rule construct_yearly_raw_networks:
     input: PAPER_COUNT_FILE
@@ -163,7 +165,7 @@ rule construct_yearly_raw_networks:
         year = lambda wildcards: wildcards.year
     run:
         shell("python3 workflow/construct_yearly_networks.py {input} {NETWORK_DIR} {params.year} 9999 {output.node} {output.edge}")
-
+# python3 workflow/construct_yearly_networks.py data/networks/paper_count.csv data/networks 2010 9999 data/networks/raw-nodes-2010.csv data/networks/raw-edges-2010.csv 
 
 rule detect_communities:
     input: YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, RAW_YEARLY_NODE_FILE_ALL, RAW_YEARLY_EDGE_FILE_ALL
@@ -172,6 +174,7 @@ rule detect_communities:
         years = " ".join(["%d" %d for d in AGGREGATED_YEARS]) 
     run:
         shell("python3 workflow/community_detection.py {params.years} {output}")
+# python workflow/community_detection.py 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 data/community/aggregated-community.csv
 
 rule detect_cartels: 
     input: DETECTED_CARTEL_FILE_ALL
@@ -183,6 +186,7 @@ rule detect_cartels_yearly:
         year = lambda wildcards : wildcards.year 
     run:
         shell("python3 workflow/detect_cartels.py {params.year} {NETWORK_DIR} {THETA_CIDRE} {ALPHA_CIDRE} {DETECTED_COMMUNITY_FILE} {output}")
+# python workflow/detect_cartels.py 2000 data/networks 0.15 0.01 data/community/aggregated-community.csv data/cartels/cartels-2000.csv
 
 # Irrelevant as not looking into journals?
 # rule match_mag_wos_suspended_journals_by_TR: 
