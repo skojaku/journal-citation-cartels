@@ -13,7 +13,7 @@ cleaned_data_dir=$2
 #
 # Escape the quotes
 #
-/lfs2/yuzhongh/tristan/dos2unix $source_data_dir/*.txt
+/lfs2/yuzhongh/dos2unix $source_data_dir/*.txt
 
 rm -r $cleaned_data_dir 
 mkdir $cleaned_data_dir
@@ -33,7 +33,7 @@ mkdir $cleaned_data_dir
 
 { echo -e "JournalId:ID(Journal-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Journals.txt; } >$cleaned_data_dir/Journals.txt
 
-{ echo -e "AffiliationId:ID(Affiliation-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Affiliation.txt; } >$cleaned_data_dir/Affiliation.txt
+{ echo -e "AffiliationId:ID(Affiliation-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Affiliations.txt; } >$cleaned_data_dir/Affiliation.txt
 
 { echo -e "ConferenceSeriesId:ID(Conference-ID)\tNormalizedName";cut -f 1,3 $source_data_dir/ConferenceSeries.txt; } >$cleaned_data_dir/ConferenceSeries.txt
 
