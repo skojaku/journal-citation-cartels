@@ -33,7 +33,7 @@ mkdir $cleaned_data_dir
 
 { echo -e "JournalId:ID(Journal-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Journals.txt; } >$cleaned_data_dir/Journals.txt
 
-{ echo -e "AffiliationId:ID(Affiliation-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Affiliation.txt; } >$cleaned_data_dir/Affiliation.txt
+{ echo -e "AffiliationId:ID(Affiliation-ID)\tNormalizedName\t";cut -f 1,3 $source_data_dir/Affiliations.txt; } >$cleaned_data_dir/Affiliation.txt
 
 { echo -e "ConferenceSeriesId:ID(Conference-ID)\tNormalizedName";cut -f 1,3 $source_data_dir/ConferenceSeries.txt; } >$cleaned_data_dir/ConferenceSeries.txt
 

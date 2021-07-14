@@ -1,0 +1,3 @@
+data_dir: "/lfs2/yuzhongh/tristan/journal-citation-cartels/data"
+fig_dir: "/lfs2/yuzhongh/tristan/journal-citation-cartels/figs"
+container_key: "DefaultEndpointsProtocol=https;AccountName=magasuscisi;AccountKey=wKBxp5C8dtJykztTdZK68y9KOpMmRur7WSU2+uHxM4Q23WhTtyYy289rOIA+gHQ4Y0EBD6HnsbRq02RMCAxjNg==;EndpointSuffix=core.windows.net"
