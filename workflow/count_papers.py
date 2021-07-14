@@ -10,9 +10,10 @@ if __name__ == "__main__":
     graph = utils.get_db()
 
     # Compute the paper count first
+    # TODO get only unique relationships
     query = """ 
     MATCH (j:Affiliation)<-[:published_from]-(p)
-    return ID(j) as id, count(p) as pcount, p.Year as year
+    return ID(j) as id, count(DISTINCT p) as pcount, p.Year as year
     """
     df = graph.run(query).to_data_frame()
 

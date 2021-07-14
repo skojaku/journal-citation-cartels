@@ -120,7 +120,7 @@ rule import_neo4j:
     output: directory(MAG_DB_DIR)
     run:
         shell("bash workflow/mag2neo4j.sh {MAG_DB_DIR} {MAG_CLEANED_DATA_DIR} {DB_CONF_DIR} {DBNAME}")
-# "bash workflow/mag2neo4j.sh data/database data/cleaned workflow magdb"
+# "bash workflow/mag2neo4j.sh /lfs2/yuzhongh/tristan/journal-citation-cartels/data/database /lfs2/yuzhongh/tristan/journal-citation-cartels/data/cleaned workflow magdb"
 
 # Creates file headers?
 rule cleanup_mag:
