@@ -26,7 +26,7 @@ def to_graph_tool(adj, membership=None):
 def make_community_table(states, nodes):
     b = states.get_blocks()
     cids = b.a
-    return pd.DataFrame({"node_id":np.arange(nodes.size), "mag_journal_id": nodes, "community_id": cids})
+    return pd.DataFrame({"node_id":np.arange(nodes.size), "mag_affiliation_id": nodes, "community_id": cids})
 
 
 if __name__ == "__main__":
@@ -45,11 +45,13 @@ if __name__ == "__main__":
     print("Estimating")
     states = gt.minimize_blockmodel_dl(
         G,
-        deg_corr=True,
+       
+        # deg_corr=True,
         state_args=dict(eweight=G.ep.weight),
-        verbose=True,
+        multilevel_mcmc_args=dict(B_max=np.round(A.shape[0] / 3).astype(int)),
+
+        # verbose=True,
         #TODO params have changed so this no longer works
-        B_max=np.round(A.shape[0] / 3).astype(int),
     )
 
     print("Save")
