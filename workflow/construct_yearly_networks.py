@@ -19,38 +19,42 @@ if __name__ == "__main__":
 
     # Load the paper count
     pcount = pd.read_csv(PAPER_COUNT_FILE, sep="\t")
+    print("Read csv")
 
     # Count the number of papers for each Affiliation
     ys = YEAR - WINDOW_LENGTH
     yf = YEAR
     query = """
-    MATCH (jtrg:Affiliation)<-[:published_from]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:published_from]->(jsrc:Affiliation)
+    MATCH (jtrg:Affiliations)<-[:published_from]-(trg:Paper)<-[:cites]-(src:Paper {Year:%d})-[:published_from]->(jsrc:Affiliations)
     where trg.Year<%d and trg.Year >= %d
-    return toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, ID(trg) as p_target, ID(src) as s_target
+    return DISTINCT toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, toInteger(trg.PaperId) as p_target, toInteger(src.PaperId) as s_target
     """ % (
         yf,
         yf,
         ys,
     )
     edges = graph.run(query).to_data_frame()
-    #print(query, edges)
+    # print(query, edges)
+    print("Done with query")
 
     # Make a node table
     ccount = edges.groupby(["target"])["s_target"].nunique()
     nodes = pd.DataFrame({"ccount": ccount})
     nodes = nodes.reset_index().rename(columns={"target": "id"})
+    print("Made node table")
 
     # Slice the paper counts between ys and yf
     s = (ys <= pcount.year) & (pcount.year < yf)
     _pcount = pcount[s].copy()
     _pcount = _pcount.groupby("id").agg("sum")["pcount"].reset_index()
+    print("Sliced paper")
 
     # Merge the pcount to the node table
     nodes = pd.merge(left=nodes, right=_pcount, left_on="id", right_on="id", how="left")
 
     # Uniqify and count
     edges = edges.groupby(["source", "target"]).size().reset_index(name="w")
-
+    print("Unified edges")
     # # Add citations from retracted papers 
     # #Probably not going to bother with? 
     # if year == 2010 or year == 2011:
