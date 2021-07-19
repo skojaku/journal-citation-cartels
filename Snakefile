@@ -186,7 +186,7 @@ rule detect_cartels_yearly:
         year = lambda wildcards : wildcards.year 
     run:
         shell("python3 workflow/detect_cartels.py {params.year} {NETWORK_DIR} {THETA_CIDRE} {ALPHA_CIDRE} {DETECTED_COMMUNITY_FILE} {output}")
-# python workflow/detect_cartels.py 2000 data/networks 0.15 0.01 data/community/aggregated-community.csv data/cartels/cartels-2000.csv
+# python workflow/detect_cartels.py 2009 data/networks 0.15 0.01 data/community/aggregated-community.csv data/cartels/cartels-2009.csv
 
 # Irrelevant as not looking into journals?
 # rule match_mag_wos_suspended_journals_by_TR: 
@@ -206,6 +206,7 @@ rule plot_cartel_stats:
     output: FIG_DETECTED_CAETEL_STATS
     run:
         shell("python3 workflow/plot-cartel-stat.py {CARTEL_DIR} {output}")
+# python3 workflow/plot-cartel-stat.py data/cartels data/fig_dir/detected-cartel-stat.pdf
 
 # rule classify_cartels: 
 #     input: TR_SUSPENDED_JOURNAL_GROUPS_FILE, YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 

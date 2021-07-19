@@ -98,7 +98,7 @@ if __name__ == "__main__":
             ax.set_yscale("log")
     ax.set_ylim(bottom=1, top=100)
 
-    ax.set_ylabel("Number of journals in a cartel")
+    ax.set_ylabel("Number of Affiliations in a Cartel")
     ax.set_xlabel("Year")
     ax.set_xticks(np.arange(0, 20, 2))
     ax.set_xticklabels(["`%02d" % d for d in np.arange(2000, 2020, 2) - 2000])
