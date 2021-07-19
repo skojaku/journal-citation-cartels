@@ -26,6 +26,9 @@ mkdir $cleaned_data_dir
 #=============================================
 { echo -e "FieldOfStudyId:ID(FieldOfStudy-ID)\tNormalizedName\tDisplayName";cut -f 1,3,4 $source_data_dir/FieldsOfStudy.txt; } >$cleaned_data_dir/FieldsOfStudy.txt
 
+{ echo -e ":START_ID(FieldOfStudy-ID)\t:END_ID(ChildFieldOfStudy-ID)";cut -f 1,2 $source_data_dir/ChildFieldOfStudy.txt; } >$cleaned_data_dir/ChildFieldOfStudy.txt
+
+
 { echo -e ":START_ID(Paper-ID)\t:END_ID(FieldOfStudy-ID)";cut -f 1,2 $source_data_dir/PaperFieldsOfStudy.txt; } >$cleaned_data_dir/PaperFieldsOfStudy.txt
 
 '''
