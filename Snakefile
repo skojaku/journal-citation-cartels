@@ -114,7 +114,7 @@ rule paper:
     output: PAPER
     shell: "cd {params.paper_dir}; make"
 
-# Sets up connection + database tables
+# 3. Sets up connection + database tables
 rule import_neo4j:
     input: MAG_CLEANED_DATA_FILE_ALL
     output: directory(MAG_DB_DIR)
@@ -122,7 +122,7 @@ rule import_neo4j:
         shell("bash workflow/mag2neo4j.sh {MAG_DB_DIR} {MAG_CLEANED_DATA_DIR} {DB_CONF_DIR} {DBNAME}")
 # "bash workflow/mag2neo4j.sh /lfs2/yuzhongh/tristan/journal-citation-cartels/data/database /lfs2/yuzhongh/tristan/journal-citation-cartels/data/cleaned workflow magdb"
 
-# Creates file headers?
+# 2. Creates file headers?
 rule cleanup_mag:
     input: MAG_DATA_FILE_ALL
     output: MAG_CLEANED_DATA_FILE_ALL
@@ -138,6 +138,7 @@ rule download_mag:
     run:
         shell("python3 workflow/get_mag_data.py {params.filename} {MAG_SRC_DATA_DIR} '{MAG_CONTAINER_KEY}'")
 
+# 4. 
 rule count_papers:
     input: directory(MAG_DB_DIR)
     output: PAPER_COUNT_FILE
@@ -207,6 +208,7 @@ rule plot_cartel_stats:
     run:
         shell("python3 workflow/plot-cartel-stat.py {CARTEL_DIR} {output}")
 # python3 workflow/plot-cartel-stat.py data/cartels data/fig_dir/detected-cartel-stat.pdf
+# python3 workflow/plot-cartel-stat.py data/cartels /lfs2/yuzhongh/journal-citation-cartels/figs
 
 # rule classify_cartels: 
 #     input: TR_SUSPENDED_JOURNAL_GROUPS_FILE, YEARLY_NODE_FILE_ALL, YEARLY_EDGE_FILE_ALL, DETECTED_CARTEL_FILE_ALL 

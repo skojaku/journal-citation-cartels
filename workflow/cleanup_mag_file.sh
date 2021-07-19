@@ -24,7 +24,11 @@ mkdir $cleaned_data_dir
 # Column numbers can be found in the mag data schema
 # https://docs.microsoft.com/en-us/academic-services/graph/reference-data-schema
 #=============================================
+{ echo -e "FieldOfStudyId:ID(FieldOfStudy-ID)\tNormalizedName\tDisplayName";cut -f 1,3,4 $source_data_dir/FieldsOfStudy.txt; } >$cleaned_data_dir/FieldsOfStudy.txt
 
+{ echo -e ":START_ID(Paper-ID)\t:END_ID(FieldOfStudy-ID)";cut -f 1,2 $source_data_dir/PaperFieldsOfStudy.txt; } >$cleaned_data_dir/PaperFieldsOfStudy.txt
+
+'''
 { echo -e "AuthorId:ID(Author-ID)\tNormalizedName\tDisplayName";cut -f 1,3,4 $source_data_dir/Authors.txt; } >$cleaned_data_dir/Authors.txt
 
 { echo -e "PaperId:ID(Paper-ID)\tDoi\tDocType\tPaperTitle\tYear:INT\tJournalId\tConferenceSeriesId";cut -f 1,3,4,5,8,12,13 $source_data_dir/Papers.txt; } >$cleaned_data_dir/Papers.txt
@@ -44,7 +48,7 @@ mkdir $cleaned_data_dir
 { echo -e ":START_ID(Paper-ID)\t:END_ID(Journal-ID)";cut -f 1,11 $source_data_dir/Papers.txt; } | awk -F"\t" '{if($2!="")print $0}' >$cleaned_data_dir/PaperJournalAffiliations.txt
 
 { echo -e ":START_ID(Paper-ID)\t:END_ID(Affiliation-ID)";cut -f 1,3 $source_data_dir/PaperAuthorAffiliations.txt; } | awk -F"\t" '{if($2!="")print $0}' >$cleaned_data_dir/PaperAffiliations.txt
-
+'''
 #
 # Escape the quotes
 #
