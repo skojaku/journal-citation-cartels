@@ -28,7 +28,7 @@ if __name__ == "__main__":
     #TODO Modify journal label
     community_table = pd.read_csv(COMMUNITY_FILE, sep="\t")
     community_ids = (
-        community_table.set_index("mag_journal_id").loc[nodes, "community_id"].values
+        community_table.set_index("mag_affiliation_id").loc[nodes, "community_id"].values
     )
 
     # Define the filter
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     cartel_table = cidre.detect(A_eff, THETA, is_excessive_func, min_group_edge_num=50)
 
     # Rename node labels
-    cartel_table["mag_journal_id"] = cartel_table["node_id"].apply(lambda x : nodes[x])
+    cartel_table["mag_affiliation_id"] = cartel_table["node_id"].apply(lambda x : nodes[x])
 
     # Save results
     cartel_table.to_csv(OUTPUT, sep="\t")
