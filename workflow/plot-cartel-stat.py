@@ -30,8 +30,10 @@ if __name__ == "__main__":
 
     CARTEL_DIR = sys.argv[1]
     OUTPUT = sys.argv[2]
+    start_year = 2000
+    end_year = 2007
 
-    cartel_table = load_detected_cartels(np.arange(2000, 2020), CARTEL_DIR)
+    cartel_table = load_detected_cartels(np.arange(start_year, end_year), CARTEL_DIR)
 
     # Count the number of detected groups in each year
     num_cartel = (
@@ -80,8 +82,8 @@ if __name__ == "__main__":
     ax.set_xlabel("Year")
 
     # Ticks
-    ax.set_xticks(np.arange(0, 20, 2))
-    ax.set_xticklabels(["`%02d" % d for d in np.arange(2000, 2020, 2) - 2000])
+    ax.set_xticks(np.arange(0, start_year - end_year, 2))
+    ax.set_xticklabels(["`%02d" % d for d in np.arange(start_year, end_year, 2) - 2000])
 
     #
     # Plot the size of cartels detected in each year
@@ -98,10 +100,10 @@ if __name__ == "__main__":
             ax.set_yscale("log")
     ax.set_ylim(bottom=1, top=100)
 
-    ax.set_ylabel("Number of journals in a cartel")
+    ax.set_ylabel("Number of Affiliations in a Cartel")
     ax.set_xlabel("Year")
-    ax.set_xticks(np.arange(0, 20, 2))
-    ax.set_xticklabels(["`%02d" % d for d in np.arange(2000, 2020, 2) - 2000])
+    ax.set_xticks(np.arange(0, start_year - end_year, 2))
+    ax.set_xticklabels(["`%02d" % d for d in np.arange(start_year, end_year, 2) - 2000])
 
     # Annotate
     axes[0].annotate('(a)', xy=(0.01, 0.9), textcoords = "axes fraction", fontsize = 30)
