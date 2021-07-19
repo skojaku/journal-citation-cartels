@@ -33,7 +33,7 @@ sleep 10 # Wait a bit because the neo4j may not be ready immediately
 #docker exec -it $docker_container_name bash -c '
 #====================================
 docker exec $docker_container_name bash -c '
-neo4j-admin import --database=graph.db --trim-strings=true --nodes Author=/import/Authors.txt --nodes FieldsOfStudy=/import/FieldsOfStudy.txt --nodes Affiliations=/import/Affiliation.txt --nodes Paper=/import/Papers.txt --nodes Journal=/import/Journals.txt --nodes ConferenceSeries=/import/ConferenceSeries.txt --relationships cites=/import/PaperReferences.txt --relationships written_by=/import/PaperAuthorAffiliations.txt --relationships published_from=/import/PaperAffiliations.txt --relationships studied=/import/PaperFieldsOfStudy.txt --delimiter="\t";
+neo4j-admin import --database=graph.db --trim-strings=true --nodes Author=/import/Authors.txt --nodes FieldsOfStudy=/import/FieldsOfStudy.txt --nodes Affiliations=/import/Affiliation.txt --nodes Paper=/import/Papers.txt --nodes Journal=/import/Journals.txt --nodes ConferenceSeries=/import/ConferenceSeries.txt --relationships cites=/import/PaperReferences.txt --relationships published_from_journal written_by=/PaperJournalAffiliations.txt --relationships written_by=/import/PaperAuthorAffiliations.txt --relationships published_from=/import/PaperAffiliations.txt --relationships studied=/import/PaperFieldsOfStudy.txt --delimiter="\t";
 exit
 '
 # TODO modify above
