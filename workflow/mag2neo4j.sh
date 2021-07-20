@@ -33,7 +33,7 @@ sleep 10 # Wait a bit because the neo4j may not be ready immediately
 #docker exec -it $docker_container_name bash -c '
 #====================================
 docker exec $docker_container_name bash -c '
-neo4j-admin import --database=graph.db --trim-strings=true --nodes Author=/import/Authors.txt --nodes FieldsOfStudy=/import/FieldsOfStudy.txt --nodes Affiliations=/import/Affiliation.txt --nodes Paper=/import/Papers.txt --nodes Journal=/import/Journals.txt --nodes ConferenceSeries=/import/ConferenceSeries.txt --relationships cites=/import/PaperReferences.txt --relationships written_by=/import/PaperAuthorAffiliations.txt --relationships published_from=/import/PaperAffiliations.txt --relationships studied=/import/PaperFieldsOfStudy.txt --delimiter="\t";
+neo4j-admin import --database=graph.db --trim-strings=true --nodes Author=/import/Authors.txt --nodes FieldsOfStudy=/import/FieldsOfStudy.txt --nodes Affiliations=/import/Affiliation.txt --nodes Paper=/import/Papers.txt --nodes Journal=/import/Journals.txt --nodes ConferenceSeries=/import/ConferenceSeries.txt --relationships cites=/import/PaperReferences.txt --relationships published_from_journal=/import/PaperJournalAffiliations.txt --relationships child_of=/import/FieldOfStudyChildren.txt --relationships written_by=/import/PaperAuthorAffiliations.txt --relationships published_from=/import/PaperAffiliations.txt --relationships field_of_study=/import/PaperFieldsOfStudy.txt --delimiter="\t";
 exit
 '
 # TODO modify above
@@ -66,8 +66,8 @@ CREATE INDEX ON :Author(AuthorId);
 CREATE INDEX ON :Author(NormalizedName);
 CREATE INDEX ON :Journal(JournalId);
 CREATE INDEX ON :Journal(NormalizedName);
-CREATE INDEX ON :FieldsOfStudy(FieldsOfStudyId)
-CREATE INDEX ON :FieldsOfStudy(NormalizedName)
+CREATE INDEX ON :FieldsOfStudy(FieldsOfStudyId);
+CREATE INDEX ON :FieldsOfStudy(NormalizedName);
 CREATE INDEX ON :Affiliations(AffiliationId);
 CREATE INDEX ON :Affiliations(NormalizedName);
 CREATE INDEX ON :Paper(Doi);

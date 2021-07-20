@@ -99,5 +99,9 @@ def detect(
             }
         )
         df_Ul_list += [df_Ul]
-    df_U = pd.concat(df_Ul_list, ignore_index=True)
+    if df_Ul_list == []:
+        print("No groups found")
+        df_U = df_Ul_list
+    else:
+        df_U = pd.concat(df_Ul_list, ignore_index=True)
     return df_U

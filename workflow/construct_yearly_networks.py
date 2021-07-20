@@ -4,6 +4,7 @@ import os
 import sys
 from scipy import sparse
 import utils
+from http.client import IncompleteRead
 
 PAPER_COUNT_FILE = sys.argv[1]
 YEAR = int(sys.argv[3])
@@ -32,6 +33,7 @@ if __name__ == "__main__":
     MATCH (src)-[:published_from]->(jsrc:Affiliations)
     MATCH (jtrg:Affiliations)<-[:published_from]-(trg)
     return DISTINCT toInteger(jsrc.AffiliationId) as source, toInteger(jtrg.AffiliationId) as target, toInteger(trg.PaperId) as p_target, toInteger(src.PaperId) as s_target
+    LIMIT 1000
     """ % (
         yf,
         yf,
@@ -39,7 +41,11 @@ if __name__ == "__main__":
         field,
         field,
     )
+
     edges = graph.run(query).to_data_frame()
+
+ 
+
     # print(query, edges)
     print("Done with query")
 
