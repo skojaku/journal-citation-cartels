@@ -11,10 +11,16 @@ if __name__ == "__main__":
 
     # Compute the paper count first
     # TODO get only unique relationships
+    field = "computer science"
     query = """ 
-    MATCH (j:Affiliations)<-[:published_from]-(p)
+    MATCH (src:Paper)-[:field_of_study]->(f:FieldsOfStudy)
+    WHERE f.NormalizedName=%s 
+    WITH src
+    MATCH (src)-[:published_from]->(j:Affiliations)
     return j.AffiliationId as id, count(DISTINCT p) as pcount, p.Year as year
-    """
+    """ % (
+        field,
+    )
     df = graph.run(query).to_data_frame()
 
     df.to_csv(PAPER_COUNT_FILE, sep="\t")
